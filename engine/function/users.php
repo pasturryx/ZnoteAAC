@@ -1113,7 +1113,7 @@ function user_account_id_from_name($id) {
 }
 
 // Add additional premium days to account id
-function user_account_add_premdays($accid, $days) {
+function user_account_add_premium_ends_at($accid, $days) {
 	global $tfs_10_hasPremDays; // Initialized in engine/init.php
 	$accid = (int)$accid;
 	$days = (int)$days;
@@ -1121,10 +1121,10 @@ function user_account_add_premdays($accid, $days) {
 	if (config('ServerEngine') !== 'OTHIRE') {
 		if ($tfs_10_hasPremDays) {
 			if (mysql_select_single("SHOW COLUMNS from `accounts` WHERE `Field` = 'lastday'") === false) {
-				mysql_update("UPDATE `accounts` SET `premdays` = `premdays`+{$days} WHERE `id`='{$accid}'");
+				mysql_update("UPDATE `accounts` SET `premium_ends_at` = `premium_ends_at`+{$days} WHERE `id`='{$accid}'");
 			} else {
 				mysql_update("	UPDATE `accounts` 
-								SET `premdays` = `premdays`+{$days} 
+								SET `premium_ends_at` = `premium_ends_at`+{$days} 
 								,`lastday` = GREATEST(`lastday`,UNIX_TIMESTAMP()) + ({$days} * 86400)
 								WHERE `id`='{$accid}'
 				");
@@ -1616,10 +1616,17 @@ function user_character_exist($username) {
 }
 
 // Checks that this email exist.
+//function user_email_exist($email) {
+//	$email = sanitize($email);
+//	$data = mysql_select_single("SELECT `id` FROM `accounts` WHERE `email`='$email';");
+//	return ($data !== false) ? true : false;
+//}
 function user_email_exist($email) {
-	$email = sanitize($email);
-	$data = mysql_select_single("SELECT `id` FROM `accounts` WHERE `email`='$email';");
-	return ($data !== false) ? true : false;
+    $email = sanitize($email);
+    $data = mysql_select_single("SELECT `id` FROM `accounts` WHERE `email`='$email';");
+
+    // Check if the query was successful and a record was found
+    return ($data !== false && !empty($data));
 }
 
 // Fetch user account ID from registered email. (this is used by etc lost account)

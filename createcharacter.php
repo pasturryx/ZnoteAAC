@@ -1,6 +1,5 @@
 <?php require_once 'engine/init.php';
 protect_page();
-include 'layout/overall/header.php';
 
 if (empty($_POST) === false) {
 	// $_POST['']
@@ -11,7 +10,7 @@ if (empty($_POST) === false) {
 			break 1;
 		}
 	}
-
+	
 	// check errors (= user exist, pass long enough
 	if (empty($errors) === true) {
 		if (!Token::isValid($_POST['token'])) {
@@ -24,7 +23,7 @@ if (empty($_POST) === false) {
 			if (user_character_exist($_POST['name']) !== false) {
 				$errors[] = 'Sorry, that character name already exist.';
 			}
-			if (!preg_match("/^[a-zA-Z ]+$/", $_POST['name'])) {
+			if (!preg_match("/^[a-zA-Z_ ]+$/", $_POST['name'])) {
 				$errors[] = 'Your name may only contain a-z, A-Z and spaces.';
 			}
 			if (strlen($_POST['name']) < $config['minL'] || strlen($_POST['name']) > $config['maxL']) {
@@ -32,17 +31,13 @@ if (empty($_POST) === false) {
 			}
 			// name restriction
 			$resname = explode(" ", $_POST['name']);
-			$username = $_POST['name'];
 			foreach($resname as $res) {
 				if(in_array(strtolower($res), $config['invalidNameTags'])) {
-						$errors[] = 'Your username contains a restricted word.';
+					$errors[] = 'Your username contains a restricted word.';
 				}
-				if(strlen($res) == 1) {
+				else if(strlen($res) == 1) {
 					$errors[] = 'Too short words in your name.';
 				}
-			}
-			if(in_array(strtolower($username), $config['creatureNameTags'])) {
-				$errors[] = 'Your username contains a creature name.';
 			}
 			// Validate vocation id
 			if (!in_array((int)$_POST['selected_vocation'], $config['available_vocations'])) {
@@ -67,7 +62,7 @@ if (empty($_POST) === false) {
 			}
 			// Char count
 			$char_count = user_character_list_count($session_user_id);
-			if ($char_count >= $config['max_characters'] && !is_admin($user_data)) {
+			if ($char_count >= $config['max_characters']) {
 				$errors[] = 'Your account is not allowed to have more than '. $config['max_characters'] .' characters.';
 			}
 			if (validate_ip(getIP()) === false && $config['validate_IP'] === true) {
@@ -77,8 +72,6 @@ if (empty($_POST) === false) {
 	}
 }
 ?>
-
-<h1>Create Character</h1>
 <?php
 if (isset($_GET['success']) && empty($_GET['success'])) {
 	echo 'Congratulations! Your character has been created. See you in-game!';
@@ -97,73 +90,230 @@ if (isset($_GET['success']) && empty($_GET['success'])) {
 			'lastip'	=>	getIPLong(),
 			'created'	=>	time()
 		);
-
+		
 		user_create_character($character_data);
 		header('Location: createcharacter.php?success');
 		exit();
 		//End register
-
+		
 	} else if (empty($errors) === false){
 		echo '<font color="red"><b>';
 		echo output_errors($errors);
 		echo '</b></font>';
 	}
 	?>
-	<form action="" method="post">
-		<ul>
-			<li>
-				Name:<br>
-				<input type="text" name="name">
-			</li>
-			<li>
-				<!-- Available vocations to select from when creating character -->
-				Vocation:<br>
-				<select name="selected_vocation">
-				<?php foreach ($config['available_vocations'] as $id) { ?>
-				<option value="<?php echo $id; ?>"><?php echo vocation_id_to_name($id); ?></option>
-				<?php } ?>
-				</select>
-			</li>
-			<li>
-				<!-- Available genders to select from when creating character -->
-				Gender:<br>
-				<select name="selected_gender">
-				<option value="1">Male(boy)</option>
-				<option value="0">Female(girl)</option>
-				</select>
-			</li>
-			<?php
-			$available_towns = $config['available_towns'];
-			if (count($available_towns) > 1):
-				?>
-				<li>
-					<!-- Available towns to select from when creating character -->
-					Town:<br>
-					<select name="selected_town">
-						<?php
-						foreach ($available_towns as $tid):
-							?>
-							<option value="<?php echo $tid; ?>"><?php echo town_id_to_name($tid); ?></option>
-							<?php
-						endforeach;
-						?>
-					</select>
-				</li>
-				<?php
-			else:
-				?>
-				<input type="hidden" name="selected_town" value="<?php echo end($available_towns); ?>">
-				<?php
-			endif;
+	
+	<p style="margin: 5px 5px 10px 5px;">
+    Please choose a name and sex for your charer.<br>
+    In any case the name must not violate the naming conventions stated in the Rules, or your character might get deleted or name locked.
+</p>
+<div id="name-error" style="color: red;"></div>
+<div id="name-success" style="color: green;"></div>
+<form action="" method="post">
+    <!-- Resto del formulario -->
+		
+			<div class="RowsWithOverEffect" style="margin: 5px;">
+				<div class="TableContainer"> 
+				<div class="CaptionContainer">
+					<div class="CaptionInnerContainer">
+						<span class="CaptionEdgeLeftTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+						<span class="CaptionEdgeRightTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+						<span class="CaptionBorderTop" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+						<span class="CaptionVerticalLeft" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+							<div class="Text">Create Character</div>
+						<span class="CaptionVerticalRight" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+						<span class="CaptionBorderBottom" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+						<span class="CaptionEdgeLeftBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+						<span class="CaptionEdgeRightBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+					</div>
+				</div>
+				<table class="Table3" cellspacing="1">
+							<tr>
+								<td>
+					<div class="InnerTableContainer">
 
+								   <div class="TableShadowContainerRightTop">
+									  <div class="TableShadowRightTop" style="background-image:url(layout/tibia_img/table-shadow-rt.gif);"></div>
+								   </div>
+								   <div class="TableContentAndRightShadow" style="background-image:url(layout/tibia_img/table-shadow-rm.gif);">
+									  <div class="TableContentContainer">
+										 <table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+
+										<tr class="LabelH">
+											<td colspan="2">
+												Character Name
+											</td>
+											<td>
+												Sex
+											</td>
+											<td>
+												Town
+											</td>
+										</tr>
+										
+										<tr>
+											<td>
+												Name: 
+											</td>
+											<td>
+												<input type="text" name="name">
+											</td>
+											<td>
+												<select name="selected_gender">
+												<option value="1">Male(boy)</option>
+												<option value="0">Female(girl)</option>
+												</select>
+											</td>
+											<td>
+												<?php
+												$available_towns = $config['available_towns'];
+												if (count($available_towns) > 1):
+													?>
+														<select name="selected_town">
+															<?php 
+															foreach ($available_towns as $tid): 
+																?>
+																<option value="<?php echo $tid; ?>"><?php echo town_id_to_name($tid); ?></option>
+																<?php 
+															endforeach; 
+															?>
+														</select>
+													<?php
+												else:
+													?>
+													<input type="hidden" name="selected_town" value="<?php echo end($available_towns); ?>">
+													<?php 
+												endif;
+												?>
+											</td>
+										</tr>
+										 </table>
+										 
+									  </div>
+								   </div>
+								   <div class="TableShadowContainer">
+									  <div class="TableBottomShadow" style="background-image:url(layout/tibia_img/table-shadow-bm.gif);">
+										 <div class="TableBottomLeftShadow" style="background-image:url(layout/tibia_img/table-shadow-bl.gif);"></div>
+										 <div class="TableBottomRightShadow" style="background-image:url(layout/tibia_img/table-shadow-br.gif);"></div>
+									  </div>
+								   </div>
+								   
+								   <br>
+								   
+								   <div class="TableShadowContainerRightTop">
+									  <div class="TableShadowRightTop" style="background-image:url(layout/tibia_img/table-shadow-rt.gif);"></div>
+								   </div>
+								   <div class="TableContentAndRightShadow" style="background-image:url(layout/tibia_img/table-shadow-rm.gif);">
+									  <div class="TableContentContainer">
+										 <table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+
+										<tr class="LabelH">
+											<td colspan="2">
+												Select vocation
+											</td>
+										</tr>
+										
+										<tr>
+											<td>
+												<?php foreach ($config['available_vocations'] as $id) { ?>
+												
+												<div style="width: 25%; padding: 20px 0;float: left;text-align: left;">
+													<input type="radio" name="selected_vocation" id="<?php echo $id; ?>" value="<?php echo $id; ?>">
+													<label for="<?php echo $id; ?>"><?php echo vocation_id_to_name($id); ?></label>
+												</div>
+
+												<?php } ?>
+
+											</td>
+										</tr>
+										 </table>
+										 
+									  </div>
+								   </div>
+								   <div class="TableShadowContainer">
+									  <div class="TableBottomShadow" style="background-image:url(layout/tibia_img/table-shadow-bm.gif);">
+										 <div class="TableBottomLeftShadow" style="background-image:url(layout/tibia_img/table-shadow-bl.gif);"></div>
+										 <div class="TableBottomRightShadow" style="background-image:url(layout/tibia_img/table-shadow-br.gif);"></div>
+									  </div>
+								   </div>
+								   
+								   <br>
+								   <center>
+											<input name="submit" class="BigButton btn" type="submit" style="margin: 0 5px;display: inline-block;" value="Create Character">
+
+										<a href="myaccount.php">
+											<div class="BigButton btn" style="margin: 0 5px;display: inline-block;background-image:url(layout/tibia_img/sbutton.gif)">
+												Back
+											</div>
+										</a>
+								   </center>
+								   <br>
+
+	
+					 	</div> 
+
+						
+						</td>
+						</tr>
+						
+						</table>
+				
+
+
+							
+					</div>
+				</div>
+
+					
+				
+
+	<?php
 			/* Form file */
 			Token::create();
 			?>
-			<li>
-				<input type="submit" value="Create Character">
-			</li>
-		</ul>
+
+				
+
 	</form>
 	<?php
 }
-include 'layout/overall/footer.php'; ?>
+?>
+<script>
+    function checkCharacterName() {
+        const name = document.getElementById('characterName').value;
+        const nameError = document.getElementById('name-error');
+        const nameSuccess = document.getElementById('name-success');
+
+        // Clear previous messages
+        nameError.textContent = '';
+        nameSuccess.textContent = '';
+
+        if (name.length === 0) {
+            nameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> Name is required.';
+            return;
+        }
+
+        fetch('layout/sub/validate_character.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'name=' + encodeURIComponent(name)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response:', data); // Debugging: Log response data
+            if (data.success) {
+                nameSuccess.innerHTML = '<img src="layout/img/ok.gif" alt="Success"> ' + data.message;
+            } else {
+                nameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> ' + data.message;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            nameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> Error validating name.';
+        });
+    }
+
+    document.getElementById('characterName').addEventListener('input', checkCharacterName);
+</script>

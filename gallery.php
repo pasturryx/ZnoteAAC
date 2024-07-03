@@ -13,7 +13,7 @@ if ($logged_in === true) {
 			Select image to upload:<br><input type="file" name="imagefile" id="imagefile"><br>
 			Image Title:<br /><input type="text" name="title" size="70"><br />
 			Image Description:<br /><textarea name="desc" cols="55" rows="15"></textarea><br />
-			<input type="submit" value="Upload Image" name="submit">
+			<input type="submit" value="Upload Image" name="submit"div class="BigButton btn" style="background: url(layout/tibia_img/sbutton.gif); width:135px;height:25px;border: 0 none;" border="0" >
 		</form>
 		<?php
 	}
@@ -93,7 +93,8 @@ if (empty($_POST)) {
 	<h1>Gallery</h1>
 	<?php if ($logged_in === true) { ?>
 	<form action="" method="post">
-		Got some cool images to show the community? <input type="submit" name="new" value="Add Image">
+		Got some cool images to show the community? <!--<input type="submit" name="new" value="Add Image">-->
+		<input type="submit" name="new" value="Add Image" div class="BigButton btn" style="margin: 0 5px;float: right;background-image:url(layout/tibia_img/sbutton.gif) ">
 	</form>
 	<?php
 	}

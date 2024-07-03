@@ -305,8 +305,8 @@ if ($render_page) {
 		<h1>My account</h1>
 		<p>Welcome to your account page, <?php if ($config['ServerEngine'] !== 'OTHIRE') echo $user_data['name']; else echo $user_data['id']; ?><br>
 			<?php if ($config['ServerEngine'] !== 'OTHIRE') {
-				if ($user_data['premdays'] != 0) {
-					echo 'You have ' .$user_data['premdays']. ' remaining premium account days.';
+				if ($user_data['premium_ends_at'] != 0) {
+					echo 'You have ' .$user_data['premium_ends_at']. ' remaining premium account days.';
 				} else {
 					echo 'You are free account.';
 				}

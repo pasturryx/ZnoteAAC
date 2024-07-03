@@ -56,7 +56,7 @@ if ($loggedin === true) {
 			// If type is 2 or 3
 			if ($buy['type'] == 2) {
 				// Add premium days to account
-				user_account_add_premdays($cid, $buy['count']);
+				user_account_add_premium_ends_at($cid, $buy['count']);
 				echo '<font color="green" size="4">You now have '.$buy['count'].' additional days of premium membership.</font>';
 			} else if ($buy['type'] == 3) {
 				// Character Gender
@@ -83,7 +83,7 @@ if ($loggedin === true) {
 if ($shop['enabled']) {
 ?>
 
-<h1>Shop Offers</h1>
+<!-- <h1>Shop Offers</h1> -->
 <?php
 if ($loggedin === true) {
 	if (!empty($_POST['buy']) && $_SESSION['shop_session'] == $_POST['session']) {
@@ -205,40 +205,97 @@ foreach ($shop_list as $key => $offer) {
 		});
 	}
 </script>
-
 <?php if (!empty($category_items)): ?>
-	<!-- ITEMIDS -->
-	<table class="show" id="cat_itemids">
-		<tr class="yellow">
-			<td>Item:</td>
-			<?php if ($config['shop']['showImage']) { ?><td>Image:</td><?php } ?>
-			<td>Count:</td>
-			<td>Points:</td>
-			<?php if ($loggedin === true): ?><td>Action:</td><?php endif; ?>
-		</tr>
-		<?php foreach ($category_items as $key => $offers): ?>
-			<tr class="special">
-				<td><?php echo $offers['description']; ?></td>
-				<?php if ($config['shop']['showImage']):?>
-					<td><img src="//<?php echo $config['shop']['imageServer']; ?>/<?php echo $offers['itemid']; ?>.<?php echo $config['shop']['imageType']; ?>" alt="img"></td>
-				<?php endif; ?>
-				<td><?php echo $offers['count']; ?>x</td>
-				<td><?php echo $offers['points']; ?></td>
-				<?php if ($loggedin === true): ?>
-				<td>
-					<form action="" method="POST">
-						<input type="hidden" name="buy" value="<?php echo (int)$key; ?>">
-						<input type="hidden" name="session" value="<?php echo time(); ?>">
-						<input type="submit" value="  PURCHASE  "  class="needconfirmation" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
-					</form>
-				</td>
-				<?php endif; ?>
-			</tr>
-		<?php endforeach; ?>
-	</table>
+    <!-- Add the CSS styles for the table headers -->
+    <style>
+        .TableContainer .show th, .TableContainer .show td {
+            padding: 8px;
+            text-align: left;
+        }
+        .TableContainer .show th {
+            background-color: #A9A9A9 /* Dim Grey */
+            color: white;
+        }
+    </style>
+    <!-- ITEMIDS -->
+    <div class="TableContainer" style="margin-top: 1cm; ">
+        <div class="CaptionContainer">
+            <div class="CaptionInnerContainer">
+                <span class="CaptionEdgeLeftTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionEdgeRightTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionBorderTop" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+                <span class="CaptionVerticalLeft" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+                <div class="Text">Buy Items</div>
+                <span class="CaptionVerticalRight" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+                <span class="CaptionBorderBottom" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+                <span class="CaptionEdgeLeftBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionEdgeRightBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+            </div>
+        </div>
+        <table class="Table3" cellspacing="2">
+            <tr>
+                <td>
+                    <div class="InnerTableContainer">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <div class="TableShadowContainerRightTop">
+                                        <div class="TableShadowRightTop" style="background-image:url(layout/tibia_img/table-shadow-rt.gif);"></div>
+                                    </div>
+                                    <div class="TableContentAndRightShadow" style="background-image:url(layout/tibia_img/table-shadow-rm.gif);">
+                                        <div class="TableContentContainer">
+                                            <table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+                                                <tr>
+                                                    <table class="show" id="cat_itemids">
+                                                        <tr class="yellow">
+                                                            <th>Item:</th>
+                                                            <?php if ($config['shop']['showImage']) { ?><th>Image:</th><?php } ?>
+                                                            <th>Count:</th>
+                                                            <th>Points:</th>
+                                                            <?php if ($loggedin === true): ?><th>Action:</th><?php endif; ?>
+                                                        </tr>
+                                                        <?php foreach ($category_items as $key => $offers): ?>
+                                                            <tr class="special">
+                                                                <td><?php echo $offers['description']; ?></td>
+                                                                <?php if ($config['shop']['showImage']):?>
+                                                                    <td><img src="/<?php echo $config['shop']['imageServer']; ?>/<?php echo $offers['itemid']; ?>.<?php echo $config['shop']['imageType']; ?>" alt="img"></td>
+                                                                <?php endif; ?>
+                                                                <td><?php echo $offers['count']; ?>x</td>
+                                                                <td><?php echo $offers['points']; ?></td>
+                                                                <?php if ($loggedin === true): ?>
+                                                                <td>
+                                                                    <form action="" method="POST">
+                                                                        <input type="hidden" name="buy" value="<?php echo (int)$key; ?>">
+                                                                        <input type="hidden" name="session" value="<?php echo time(); ?>">
+                                                                        <input type="submit" value="  PURCHASE  " class="BigButton btn" style="margin: 0 5px;display: inline-block;background-image:url(layout/tibia_img/button_green.gif)" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
+                                                                    </form>
+                                                                </td>
+                                                                <?php endif; ?>
+                                                            </tr>
+                                                        <?php endforeach; ?>
+                                                    </table>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="TableShadowContainer">
+                                        <div class="TableBottomShadow" style="background-image:url(layout/tibia_img/table-shadow-bm.gif);">
+                                            <div class="TableBottomLeftShadow" style="background-image:url(layout/tibia_img/table-shadow-bl.gif);"></div>
+                                            <div class="TableBottomRightShadow" style="background-image:url(layout/tibia_img/table-shadow-br.gif);"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 <?php endif; ?>
 <?php if (!empty($category_premium)): ?>
 <!-- PREMIUM DURATION -->
+
 <table class="show" id="cat_premium">
 	<tr class="yellow">
 		<td>Description:</td>
@@ -251,7 +308,7 @@ foreach ($shop_list as $key => $offer) {
 		<tr class="special">
 			<td><?php echo $offers['description']; ?></td>
 			<?php if ($config['shop']['showImage']):?>
-				<td><img src="//<?php echo $config['shop']['imageServer']; ?>/<?php echo $offers['itemid']; ?>.<?php echo $config['shop']['imageType']; ?>" alt="img"></td>
+				<td><img src="/<?php echo $config['shop']['imageServer']; ?>/<?php echo $offers['itemid']; ?>.<?php echo $config['shop']['imageType']; ?>" alt="img"></td>
 			<?php endif; ?>
 			<td><?php echo $offers['count']; ?> Days</td>
 			<td><?php echo $offers['points']; ?></td>
@@ -260,7 +317,7 @@ foreach ($shop_list as $key => $offer) {
 				<form action="" method="POST">
 					<input type="hidden" name="buy" value="<?php echo (int)$key; ?>">
 					<input type="hidden" name="session" value="<?php echo time(); ?>">
-					<input type="submit" value="  PURCHASE  "  class="needconfirmation" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
+					<input type="submit" value="  PURCHASE  " div class="BigButton btn" style="margin: 0 5px;display: inline-block;background-image:url(layout/tibia_img/button_green.gif)" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
 				</form>
 			</td>
 			<?php endif; ?>
@@ -269,53 +326,150 @@ foreach ($shop_list as $key => $offer) {
 </table>
 <?php endif; ?>
 <?php if (!empty($category_outfits)): ?>
-<!-- OUTFITS -->
-<table class="show" id="cat_outfits">
-	<tr class="yellow">
-		<td>Description:</td>
-		<?php if ($config['shop']['showImage']) { ?><td>Image:</td><?php } ?>
-		<td>Points:</td>
-		<?php if ($loggedin === true): ?><td>Action:</td><?php endif; ?>
-	</tr>
-	<?php foreach ($category_outfits as $key => $offers):
-		if (!is_array($offers['itemid'])) $offers['itemid'] = [$offers['itemid']];
-		if (COUNT($offers['itemid']) > 2): ?>
-			<tr class="special">
-				<td colspan="2">
-					<p><strong>Error:</strong> Outfit offer don't support more than 2 outfits. <?php echo COUNT($offers['itemid']); ?> configured.
-						<br>[<?php echo implode(',', $offers['itemid']); ?>]</p>
-				</td>
-			</tr>
-		<?php endif; ?>
-		<tr class="special">
-			<td><?php echo $offers['description']; ?></td>
-			<?php if ($config['show_outfits']['shop']):?>
-				<td><?php foreach($offers['itemid'] as $outfitId): ?>
-					<img src="<?php echo $config['show_outfits']['imageServer']; ?>?id=<?php echo $outfitId; ?>&addons=<?php echo $offers['count']; ?>&head=<?php echo rand(1, 132); ?>&body=<?php echo rand(1, 132); ?>&legs=<?php echo rand(1, 132); ?>&feet=<?php echo rand(1, 132); ?>" alt="img">
-				<?php endforeach; ?></td>
-			<?php endif; ?>
-			<td><?php echo $offers['points']; ?></td>
-			<?php if ($loggedin === true): ?>
-			<td>
-				<form action="" method="POST">
-					<input type="hidden" name="buy" value="<?php echo (int)$key; ?>">
-					<input type="hidden" name="session" value="<?php echo time(); ?>">
-					<input type="submit" value="  PURCHASE  "  class="needconfirmation" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
-				</form>
-			</td>
-			<?php endif; ?>
-		</tr>
-	<?php endforeach; ?>
-</table>
+    <!-- Add the CSS styles for the table headers -->
+    <style>
+        .TableContainer .TableContent th, .TableContainer .TableContent td {
+            padding: 8px;
+            text-align: left;
+        }
+        .TableContainer .TableContent th {
+            background-color: #696969; /* Dim Grey */
+            color: white;
+        }
+    </style>
+    <!-- OUTFITS -->
+    <div class="TableContainer" style="margin-top: 1cm;">
+        <div class="CaptionContainer">
+            <div class="CaptionInnerContainer">
+                <span class="CaptionEdgeLeftTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionEdgeRightTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionBorderTop" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+                <span class="CaptionVerticalLeft" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+                <div class="Text">Outfits</div>
+                <span class="CaptionVerticalRight" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+                <span class="CaptionBorderBottom" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+                <span class="CaptionEdgeLeftBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionEdgeRightBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+            </div>
+        </div>
+        <table class="Table3" cellspacing="2">
+            <tr>
+                <td>
+                    <div class="InnerTableContainer">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <div class="TableShadowContainerRightTop">
+                                        <div class="TableShadowRightTop" style="background-image:url(layout/tibia_img/table-shadow-rt.gif);"></div>
+                                    </div>
+                                    <div class="TableContentAndRightShadow" style="background-image:url(layout/tibia_img/table-shadow-rm.gif);">
+                                        <div class="TableContentContainer">
+                                            <table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+                                                <tr>
+                                                    <table class="show" id="cat_outfits">
+                                                        <tr class="yellow">
+                                                            <th>Description:</th>
+                                                            <?php if ($config['shop']['showImage']) { ?><th>Image:</th><?php } ?>
+                                                            <th>Points:</th>
+                                                            <?php if ($loggedin === true): ?><th>Action:</th><?php endif; ?>
+                                                        </tr>
+                                                        <?php foreach ($category_outfits as $key => $offers):
+                                                            if (!is_array($offers['itemid'])) $offers['itemid'] = [$offers['itemid']];
+                                                            if (COUNT($offers['itemid']) > 2): ?>
+                                                                <tr class="special">
+                                                                    <td colspan="2">
+                                                                        <p><strong>Error:</strong> Outfit offer don't support more than 2 outfits. <?php echo COUNT($offers['itemid']); ?> configured.
+                                                                            <br>[<?php echo implode(',', $offers['itemid']); ?>]</p>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endif; ?>
+                                                            <tr class="special">
+                                                                <td><?php echo $offers['description']; ?></td>
+                                                                <?php if ($config['show_outfits']['shop']):?>
+                                                                    <td><?php foreach($offers['itemid'] as $outfitId): ?>
+                                                                        <img src="<?php echo $config['show_outfits']['imageServer']; ?>?id=<?php echo $outfitId; ?>&addons=<?php echo $offers['count']; ?>&head=<?php echo rand(1, 132); ?>&body=<?php echo rand(1, 132); ?>&legs=<?php echo rand(1, 132); ?>&feet=<?php echo rand(1, 132); ?>" alt="img">
+                                                                    <?php endforeach; ?></td>
+                                                                <?php endif; ?>
+                                                                <td><?php echo $offers['points']; ?></td>
+                                                                <?php if ($loggedin === true): ?>
+                                                                    <td>
+                                                                        <form action="" method="POST">
+                                                                            <input type="hidden" name="buy" value="<?php echo (int)$key; ?>">
+                                                                            <input type="hidden" name="session" value="<?php echo time(); ?>">
+                                                                            <input type="submit" value="  PURCHASE  " div class="BigButton btn" style="margin: 0 5px;display: inline-block;background-image:url(layout/tibia_img/button_green.gif)" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
+                                                                        </form>
+                                                                    </td>
+                                                                <?php endif; ?>
+                                                            </tr>
+                                                        <?php endforeach; ?>
+                                                    </table>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="TableShadowContainer">
+                                        <div class="TableBottomShadow" style="background-image:url(layout/tibia_img/table-shadow-bm.gif);">
+                                            <div class="TableBottomLeftShadow" style="background-image:url(layout/tibia_img/table-shadow-bl.gif);"></div>
+                                            <div class="TableBottomRightShadow" style="background-image:url(layout/tibia_img/table-shadow-br.gif);"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+<!-- termino -->
+
+
 <?php endif; ?>
 <?php if (!empty($category_mounts)): ?>
+	
 <!-- MOUNTS -->
+    
+<!-- <h1>Buy Points</h1> -->
+<!-- <h2>Buy points using Paypal:</h2> -->
+ <div class="TableContainer" style="margin-top: 1cm; ">
+        <div class="CaptionContainer">
+            <div class="CaptionInnerContainer">
+                <span class="CaptionEdgeLeftTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionEdgeRightTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionBorderTop" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+                <span class="CaptionVerticalLeft" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+                <div class="Text">Mounts</div>
+                <span class="CaptionVerticalRight" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+                <span class="CaptionBorderBottom" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+                <span class="CaptionEdgeLeftBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionEdgeRightBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+            </div>
+        <!-- </div> -->
+<!-- <h1>Biggest Murders</h1> -->
+  <table class="Table3" cellspacing="2">
+            <tr>
+                <td>
+                    <div class="InnerTableContainer">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <div class="TableShadowContainerRightTop">
+                                        <div class="TableShadowRightTop" style="background-image:url(layout/tibia_img/table-shadow-rt.gif);"></div>
+                                    </div>
+                                    <div class="TableContentAndRightShadow" style="background-image:url(layout/tibia_img/table-shadow-rm.gif);">
+                                        <div class="TableContentContainer">
+                                            <table class="TableContent" width="100%" style="border:1px solid #696969;">
+                                                <tr>
 <table class="show" id="cat_mounts">
 	<tr class="yellow">
-		<td>Description:</td>
-		<?php if ($config['show_outfits']['shop']) { ?><td>Image:</td><?php } ?>
-		<td>Points:</td>
-		<?php if ($loggedin === true): ?><td>Action:</td><?php endif; ?>
+		 <td style="background-color: #4f4f4f;"><strong>Description:</strong></td>
+        <?php if ($config['show_outfits']['shop']) { ?>
+            <td style="background-color: #4f4f4f;"><strong>Image:</strong></td>
+        <?php } ?>
+        <td style="background-color: #4f4f4f;"><strong>Points:</strong></td>
+        <?php if ($loggedin === true): ?>
+            <td style="background-color: #4f4f4f;"><strong>Action:</strong></td>
+        <?php endif; ?>
 	</tr>
 	<?php foreach ($category_mounts as $key => $offers): ?>
 		<tr class="special">
@@ -329,49 +483,124 @@ foreach ($shop_list as $key => $offer) {
 				<form action="" method="POST">
 					<input type="hidden" name="buy" value="<?php echo (int)$key; ?>">
 					<input type="hidden" name="session" value="<?php echo time(); ?>">
-					<input type="submit" value="  PURCHASE  "  class="needconfirmation" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
+					<input type="submit" value="  PURCHASE  " div class="BigButton btn" style="margin: 0 5px;display: inline-block;background-image:url(layout/tibia_img/button_green.gif)" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
 				</form>
 			</td>
 			<?php endif; ?>
 		</tr>
 	<?php endforeach; ?>
 </table>
+</table>
+</table>
+</table>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="TableShadowContainer">
+                                        <div class="TableBottomShadow" style="background-image:url(layout/tibia_img/table-shadow-bm.gif);">
+                                            <div class="TableBottomLeftShadow" style="background-image:url(layout/tibia_img/table-shadow-bl.gif);"></div>
+                                            <div class="TableBottomRightShadow" style="background-image:url(layout/tibia_img/table-shadow-br.gif);"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+      <!-- TERMINO -->
 <?php endif; ?>
 <?php if (!empty($category_misc)): ?>
-<!-- MISCELLANEOUS -->
-<table class="show" id="cat_misc">
-	<tr class="yellow">
-		<td>Description:</td>
-		<?php if ($config['shop']['showImage']) { ?><td>Image:</td><?php } ?>
-		<td>Count/duration:</td>
-		<td>Points:</td>
-		<?php if ($loggedin === true): ?><td>Action:</td><?php endif; ?>
-	</tr>
-	<?php foreach ($category_misc as $key => $offers): ?>
-		<tr class="special">
-			<td><?php echo $offers['description']; ?></td>
-			<?php if ($config['shop']['showImage']):?>
-				<td><img src="//<?php echo $config['shop']['imageServer']; ?>/<?php echo $offers['itemid']; ?>.<?php echo $config['shop']['imageType']; ?>" alt="img"></td>
-			<?php endif;
-			if ($offers['count'] === 0): ?>
-				<td>Unlimited</td>
-			<?php else: ?>
-				<td><?php echo $offers['count']; ?>x</td>
-			<?php endif; ?>
-			<td><?php echo $offers['points']; ?></td>
-			<?php if ($loggedin === true): ?>
-			<td>
-				<form action="" method="POST">
-					<input type="hidden" name="buy" value="<?php echo (int)$key; ?>">
-					<input type="hidden" name="session" value="<?php echo time(); ?>">
-					<input type="submit" value="  PURCHASE  "  class="needconfirmation" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
-				</form>
-			</td>
-			<?php endif; ?>
-		</tr>
-	<?php endforeach; ?>
-</table>
+    <!-- Add the CSS styles for the table headers -->
+    <style>
+        .TableContainer .TableContent th, .TableContainer .TableContent td {
+            padding: 8px;
+            text-align: left;
+        }
+        .TableContainer .TableContent th {
+            background-color: #696969; /* Dim Grey */
+            color: white;
+        }
+    </style>
+    <!-- MISCELLANEOUS -->
+    <div class="TableContainer" style="margin-top: 1cm; margin-bottom: 1cm;">
+        <div class="CaptionContainer">
+            <div class="CaptionInnerContainer">
+                <span class="CaptionEdgeLeftTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionEdgeRightTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionBorderTop" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+                <span class="CaptionVerticalLeft" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+                <div class="Text">Miscellaneous</div>
+                <span class="CaptionVerticalRight" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+                <span class="CaptionBorderBottom" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+                <span class="CaptionEdgeLeftBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+                <span class="CaptionEdgeRightBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+            </div>
+        </div>
+        <table class="Table3" cellspacing="2">
+            <tr>
+                <td>
+                	<div class="TableContainer" style="margin-bottom: 1cm;">
+                    <div class="InnerTableContainer">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <div class="TableShadowContainerRightTop">
+                                        <div class="TableShadowRightTop" style="background-image:url(layout/tibia_img/table-shadow-rt.gif);"></div>
+                                    </div>
+                                    <div class="TableContentAndRightShadow" style="background-image:url(layout/tibia_img/table-shadow-rm.gif);">
+                                        <div class="TableContentContainer">
+                                            <table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+                                                <tr>
+                                                    <table class="show" id="cat_misc">
+                                                        <tr class="yellow">
+                                                            <th>Description:</th>
+                                                            <?php if ($config['shop']['showImage']) { ?><th>Image:</th><?php } ?>
+                                                            <th>Count/duration:</th>
+                                                            <th>Points:</th>
+                                                            <?php if ($loggedin === true): ?><th>Action:</th><?php endif; ?>
+                                                        </tr>
+                                                        <?php foreach ($category_misc as $key => $offers): ?>
+                                                            <tr class="special">
+                                                                <td><?php echo $offers['description']; ?></td>
+                                                                <?php if ($config['shop']['showImage']):?>
+                                                                    <td><img src="/<?php echo $config['shop']['imageServer']; ?>/<?php echo $offers['itemid']; ?>.<?php echo $config['shop']['imageType']; ?>" alt="img"></td>
+                                                                <?php endif;
+                                                                if ($offers['count'] === 0): ?>
+                                                                    <td>Unlimited</td>
+                                                                <?php else: ?>
+                                                                    <td><?php echo $offers['count']; ?>x</td>
+                                                                <?php endif; ?>
+                                                                <td><?php echo $offers['points']; ?></td>
+                                                                <?php if ($loggedin === true): ?>
+                                                                    <td>
+                                                                        <form action="" method="POST">
+                                                                            <input type="hidden" name="buy" value="<?php echo (int)$key; ?>">
+                                                                            <input type="hidden" name="session" value="<?php echo time(); ?>">
+                                                                            <input type="submit" value="  PURCHASE  " div class="BigButton btn" style="margin: 0 5px;display: inline-block;background-image:url(layout/tibia_img/button_green.gif)" data-item-name="<?php echo $offers['description']; ?>" data-item-cost="<?php echo $offers['points']; ?>">
+                                                                        </form>
+                                                                    </td>
+                                                                <?php endif; ?>
+                                                            </tr>
+                                                        <?php endforeach; ?>
+                                                    </table>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="TableShadowContainer">
+                                        <div class="TableBottomShadow" style="background-image:url(layout/tibia_img/table-shadow-bm.gif);">
+                                            <div class="TableBottomLeftShadow" style="background-image:url(layout/tibia_img/table-shadow-bl.gif);"></div>
+                                            <div class="TableBottomRightShadow" style="background-image:url(layout/tibia_img/table-shadow-br.gif);"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 <?php endif; ?>
+
 
 <?php if ($shop['enableShopConfirmation']) { ?>
 <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>

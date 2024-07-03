@@ -2,7 +2,8 @@
 require_once 'engine/init.php';
 logged_in_redirect();
 include 'layout/overall/header.php';
-require_once('config.countries.php');
+require_once 'engine/function/users.php';
+require_once 'config.countries.php';
 
 if (empty($_POST) === false) {
 	// $_POST['']
@@ -37,15 +38,19 @@ if (empty($_POST) === false) {
 			$errors[] = 'This account name is blocked for registration.';
 		}
 		if ($config['ServerEngine'] !== 'OTHIRE' && $config['client'] >= 830) {
-			if (preg_match("/^[a-zA-Z0-9]+$/", $_POST['username']) == false) {
-				$errors[] = 'Your account name can only contain characters a-z, A-Z and 0-9.';
+			//if (preg_match("/^[a-zA-Z0-9]+$/", $_POST['username']) == false) {
+			//	$errors[] = 'Your account name can only contain characters a-z, A-Z and 0-9.';
+						if (preg_match("/^[0-9]+$/", $_POST['username']) == false) {
+				$errors[] = 'Your account name can only contain numbers 0-9. DO NOT USE MORE THAN 8 DIGITS.';
 			}
 		} else {
 			if (preg_match("/^[0-9]+$/", $_POST['username']) == false) {
 				$errors[] = 'Your account can only contain numbers 0-9.';
 			}
-			if ((int)$_POST['username'] < 100000 || (int)$_POST['username'] > 999999999) {
-				$errors[] = 'Your account number must be a value between 6-8 numbers long.';
+			//if ((int)$_POST['username'] < 100000 || (int)$_POST['username'] > 999999999) {
+			//	$errors[] = 'Your account number must be a value between 6-8 numbers long. DO NOT USE MORE THAN 8 DIGITS.';
+			  if ((int)$_POST['username'] < 10000000 || (int)$_POST['username'] > 99999999) {
+              $errors[] = 'Your account name must be an 8 digit long number. NO MORE THAN THAT.';
 			}
 		}
 		// name restriction
@@ -58,15 +63,15 @@ if (empty($_POST) === false) {
 				$errors[] = 'Too short words in your name.';
 			}
 		}
-		if (strlen($_POST['username']) > 32) {
-			$errors[] = 'Your account name must be less than 33 characters.';
+		if (strlen($_POST['username']) > 8) {
+			$errors[] = 'Do not use more than 8 digits, in account section.';
 		}
 		// end name restriction
 		if (strlen($_POST['password']) < 6) {
 			$errors[] = 'Your password must be at least 6 characters.';
 		}
-		if (strlen($_POST['password']) > 29) {
-			$errors[] = 'Your password must be less than 30 characters.';
+		if (strlen($_POST['password']) > 12) {
+			$errors[] = 'Your password must be less than 12 characters.';
 		}
 		if ($_POST['password'] !== $_POST['password_again']) {
 			$errors[] = 'Your passwords do not match.';
@@ -92,7 +97,9 @@ if (empty($_POST) === false) {
 }
 
 ?>
-<h1>Register Account</h1>
+
+<!--  -->
+<!-- <h1>Register Account</h1> -->
 <?php
 if (isset($_GET['success']) && empty($_GET['success'])) {
 	if ($config['mailserver']['register']) {
@@ -158,38 +165,87 @@ if (isset($_GET['success']) && empty($_GET['success'])) {
 		echo '</b></font>';
 	}
 ?>
-	<form action="" method="post">
-		<ul>
-			<li>
-				Account Name:<br>
-				<input type="text" name="username">
-			</li>
-			<li>
-				Password:<br>
-				<input type="password" name="password">
-			</li>
-			<li>
-				Password again:<br>
-				<input type="password" name="password_again">
-			</li>
-			<li>
-				Email:<br>
-				<input type="text" name="email">
-			</li>
-			<li>
-				Country:<br>
-				<select name="flag">
-					<option value="">(Please choose)</option>
-					<?php
-					foreach(array('pl', 'se', 'br', 'us', 'gb', ) as $c)
-						echo '<option value="' . $c . '">' . $config['countries'][$c] . '</option>';
+<!-- <div class="Rows]WithOverEffect" style="margin: 5px;"> -->
+	 <div class="TableContainer" style="margin-top: 1cm; margin-bottom: 1cm;">
 
-						echo '<option value="">----------</option>';
-						foreach($config['countries'] as $code => $c)
-							echo '<option value="' . $code . '">' . $c . '</option>';
-					?>
-				</select>
-			</li>
+				<div class="TableContainer"> 
+				<div class="CaptionContainer">
+					<div class="CaptionInnerContainer">
+						<span class="CaptionEdgeLeftTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+						<span class="CaptionEdgeRightTop" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+						<span class="CaptionBorderTop" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+						<span class="CaptionVerticalLeft" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+							<div class="Text">Create Account</div>
+						<span class="CaptionVerticalRight" style="background-image:url(layout/tibia_img/box-frame-vertical.gif);"></span>
+						<span class="CaptionBorderBottom" style="background-image:url(layout/tibia_img/table-headline-border.gif);"></span>
+						<span class="CaptionEdgeLeftBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+						<span class="CaptionEdgeRightBottom" style="background-image:url(layout/tibia_img/box-frame-edge.gif);"></span>
+					</div>
+				</div>
+				<table class="Table3" cellpadding="0" cellspacing="0">
+					<tr>
+						<td>
+							<div class="InnerTableContainer">
+								<table style="width:100%;">
+									<tr>
+										<td>
+											<div class="TableShadowContainerRightTop">
+												<div class="TableShadowRightTop" style="background-image:url(layout/tibia_img/table-shadow-rt.gif);"></div>
+											</div>
+											<div class="TableContentAndRightShadow" style="background-image:url(layout/tibia_img/table-shadow-rm.gif);"> 
+												<div class="TableContentContainer">
+													<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+	<!-- <form action="" method="post"> -->
+  <form action="" method="post">
+  <ul>
+    <li>
+      <b>Account:<br></b>
+      <input type="text" name="username" id="username" onblur="checkUsername()">
+      <span id="username-error" style="color: red;"></span>
+      <span id="username-success" style="color: green;"></span>
+    </li>
+    <li>
+      <b>Password:<br></b>
+      <input type="password" name="password" id="password" onblur="checkPasswordMatch()">
+      <span id="password-error" style="color: red;"></span>
+      <span id="password-success" style="color: green;"></span>
+    </li>
+    <li>
+      <b>Password again:<br></b>
+      <input type="password" name="password_again" id="password_again" onblur="checkPasswordMatch()">
+      <span id="password_again-error" style="color: red;"></span>
+      <span id="password_again-success" style="color: green;"></span>
+    </li>
+    <li>
+      <b>Email:<br></b>
+      <input type="text" name="email" id="email" onblur="checkEmail()">
+      <span id="email-error" style="color: red;"></span>
+      <span id="email-success" style="color: green;"></span>
+    </li>
+    <!-- Rest of your form fields -->
+
+                  <!-- <b>Country:<br></b> -->
+        <!-- <select name="flag"> -->
+        	<!-- <select name="flag" id="countrySelect"> -->
+            <!-- <option value="">(Please choose)</option> -->
+            <!-- <php -->
+            <!-- foreach(array('pl', 'se', 'br', 'us', 'gb', ) as $c) -->
+                <!-- echo '<option value="' . $c . '">' . $config['countries'][$c] . '</option>'; -->
+
+                <!-- echo '<option value="">----------</option>'; -->
+                <!-- foreach($config['countries'] as $code => $c) -->
+                    <!-- echo '<option value="' . $code . '">' . $c . '</option>'; -->
+            <!-- > -->
+        <!-- </select> -->
+            <!-- </li> -->
+ <li>
+  
+    <b>Country:<br></b>
+<select name="flag" id="countrySelect" style="width: 180px;">
+    <option value="">(Please wait, detecting your country...)</option>
+</select>
+</li>
+
 			<?php
 			if ($config['use_captcha']) {
 				?>
@@ -221,10 +277,240 @@ if (isset($_GET['success']) && empty($_GET['success'])) {
 				Token::create();
 			?>
 			<li>
-				<input type="submit" value="Create Account">
+					<input type="submit" value="Create Account" div class="BigButton btn" style="margin: 0 5px;display: inline-block;background-image:url(layout/tibia_img/button_green.gif)">
+				<!-- <input type="submit" value="Create Account"> -->
 			</li>
 		</ul>
 	</form>
+	 </tr>
+          								</td>
+										</tr>
+
+										 </table>
+									  </div>
+								   </div>
+								   <div class="TableShadowContainer">
+									  <div class="TableBottomShadow" style="background-image:url(layout/tibia_img/table-shadow-bm.gif);">
+										 <div class="TableBottomLeftShadow" style="background-image:url(layout/tibia_img/table-shadow-bl.gif);"></div>
+										 <div class="TableBottomRightShadow" style="background-image:url(layout/tibia_img/table-shadow-br.gif);"></div>
+									  </div>
+								   </div>
+								</td>
+							 </tr>
+					   </table>
+					</div>
+					</td>
+					</tr>
+					
+				</table>
+			</div>
+		</div>
+			</form>       
+			<!-- <script> -->
+				<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+				<!-- <script src="https://cdn.jsdelivr.net/npm/slidesjs@3/dist/jquery.slides.min.js"></script> -->
+				<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/slidesjs/3.0/jquery.slides.min.js"></script> -->
+				<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slidesjs/3.0/jquery.slides.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Your existing code
+
+        // Initialize SlidesJS
+        $("#slides").slidesjs({
+            width: 940,
+            height: 528,
+            play: {
+                active: true,
+                auto: true,
+                interval: 4000,
+                swap: true
+            }
+        });
+
+        // Function to get user's country based on IP
+        function getUserCountry() {
+            $.ajax({
+                url: 'layout/sub/check_country.php', // Updated to the correct path
+                type: 'GET',
+                success: function(data) {
+                    console.log('Response:', data); // Log the response data
+
+                    // No need to parse the response, it's already a JSON object
+                    if (data.country_code) {
+                        // Add an option for the detected country and select it by default
+                        $('#countrySelect').html('<option value="' + data.country_code + '" selected="selected">' + data.country_name + '</option>');
+                    } else {
+                        // If country code is not detected, display a default option
+                        $('#countrySelect').html('<option value="">(Country detection failed, please select)</option>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    // If an error occurs during detection, display a default option
+                    $('#countrySelect').html('<option value="">(Country detection failed, please select)</option>');
+                }
+            });
+        }
+
+        // Call the function to get user's country on page load
+        getUserCountry();
+    });
+
+    function checkPasswordMatch() {
+        const password = document.getElementById('password').value;
+        const passwordAgain = document.getElementById('password_again').value;
+
+        const passwordError = document.getElementById('password-error');
+        const passwordSuccess = document.getElementById('password-success');
+
+        const passwordAgainError = document.getElementById('password_again-error');
+        const passwordAgainSuccess = document.getElementById('password_again-success');
+
+        // Clear any previous messages
+        passwordError.textContent = '';
+        passwordSuccess.textContent = '';
+        passwordAgainError.textContent = '';
+        passwordAgainSuccess.textContent = '';
+
+        // Check if the password field is empty
+        if (password.length === 0 && passwordAgain.length === 0) {
+            passwordError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Password is required.</b>';
+            passwordAgainError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Confirm password is required.</b>';
+            return;
+        }
+
+        if (password.length === 0) {
+            passwordError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Password is required.</b>';
+            return;
+        }
+
+        if (passwordAgain.length === 0) {
+            passwordAgainError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Confirm password is required.</b>';
+            return;
+        }
+
+        // Check if the passwords are of valid length
+        if (password.length < 6) {
+            passwordError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Your password must be at least 6 characters.</b>';
+            passwordAgainError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Your password must be at least 6 characters.</b>';
+            return;
+        }
+
+        if (password.length > 12) {
+            passwordError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Your password must be less than 12 characters.</b>';
+            passwordAgainError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Your password must be less than 12 characters.</b>';
+            return;
+        }
+
+        // Check if the passwords match
+        if (password !== passwordAgain) {
+            passwordError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Passwords do not match.</b>';
+            passwordAgainError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Passwords do not match.</b>';
+        } else {
+            passwordSuccess.innerHTML = '<img src="layout/img/ok.gif" alt="Success"> <b>Passwords match.</b>';
+            passwordAgainSuccess.innerHTML = '<img src="layout/img/ok.gif" alt="Success"> <b>Passwords match.</b>';
+        }
+    }
+
+    function checkUsername() {
+        const username = document.getElementById('username').value;
+        const usernameError = document.getElementById('username-error');
+        const usernameSuccess = document.getElementById('username-success');
+
+        // Clear previous messages
+        usernameError.textContent = '';
+        usernameSuccess.textContent = '';
+
+        if (username.length === 0) {
+            usernameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Username is required.</b>';
+            return;
+        }
+
+        if (/\D/.test(username)) {
+            usernameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Your account cannot contain letters or symbols.</b>';
+            return;
+        }
+
+        if (!/^\d{1,8}$/.test(username)) {
+            usernameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Your account name must be between 1 and 8 digits.</b>';
+            return;
+        }
+
+        console.log('Checking username:', username); // Debugging: Log username
+
+        fetch('layout/sub/check_username.php?username=' + encodeURIComponent(username))
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response:', data); // Debugging: Log response data
+                if (data.error) {
+                    usernameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>' + data.error + '</b>';
+                } else if (data.exists !== undefined) {
+                    if (data.exists) {
+                        usernameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Username is already in use.</b>';
+                    } else {
+                        usernameSuccess.innerHTML = '<img src="layout/img/ok.gif" alt="Success"> <b>Username is available.</b>';
+                    }
+                } else {
+                    usernameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Unexpected response format.</b>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                usernameError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Error checking username.</b>';
+            });
+    }
+
+    function checkEmail() {
+        const email = document.getElementById('email').value;
+        const emailError = document.getElementById('email-error');
+        const emailSuccess = document.getElementById('email-success');
+
+        // Clear any previous error or success messages
+        emailError.textContent = '';
+        emailSuccess.textContent = '';
+
+        if (email.length === 0) {
+            emailError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Email is required.</b>';
+            return;
+        }
+
+        fetch('layout/sub/check_email.php?email=' + encodeURIComponent(email))
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response:', data); // Debugging: Log response data
+                if (data.error) {
+                    emailError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> ' + data.error;
+                } else if (data.exists !== undefined) {
+                    if (data.exists) {
+                        emailError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Email is already in use.</b>';
+                    } else {
+                        emailSuccess.innerHTML = '<img src="layout/img/ok.gif" alt="Success"> <b>Email is available.</b>';
+                    }
+                } else {
+                    emailError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Unexpected response format.</b>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                emailError.innerHTML = '<img src="layout/img/nok.gif" alt="Error"> <b>Error checking email.</b>';
+            });
+    }
+
+
+</script>
+
 <?php
 }
 include 'layout/overall/footer.php';

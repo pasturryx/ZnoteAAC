@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 	if (!defined('ZNOTE_OS')) {
 		$isWindows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 		define('ZNOTE_OS', ($isWindows) ? 'WINDOWS' : 'LINUX');
@@ -18,37 +18,37 @@
 	// As far as I know, OTX is based on TFS_03, so make sure TFS version is configured TFS_03
 	$config['CustomVersion'] = false;
 
-	$config['site_title'] = 'Znote AAC';
-	$config['site_title_context'] = 'Because open communities are good communities. :3';
-	$config['site_url'] = "http://demo.znote.eu";
+	$config['site_title'] = 'ForgottenServer';
+	$config['site_title_context'] = 'Oldschool server game';
+	$config['site_url'] = "https://forgottennot.online";
 
 	// Path to server folder without "\" (or "/") at the end, ex: C:\Users\Username\Documents\GitHub\forgottenserver
-	$config['server_path'] = '';
+	$config['server_path'] = 'C:\Users\felip\OneDrive\Documentos\GitHub\pro-ot';
 
 	// ------------------------ \\
 	// MYSQL CONNECTION DETAILS \\
 	// ------------------------ \\
 
 	// phpmyadmin username for OT server: (DONT USE "root" if you are hosting to public).
-	$config['sqlUser'] = 'tfs13';
+	$config['sqlUser'] = 'root';
 
 	// phpmyadmin password for OT server:
-	$config['sqlPassword'] = 'tfs13';
+	$config['sqlPassword'] = '';
 
 	// The database name to connect to. (This is usually same as username).
-	$config['sqlDatabase'] = 'tfs13';
+	$config['sqlDatabase'] = 'canary';
 
 	// Hostname is usually localhost or 127.0.0.1.
 	$config['sqlHost'] = '127.0.0.1';
 
 	// QR code authenticator Only works with TFS 1.2+
 	$config['twoFactorAuthenticator'] = false;
-	// You can use the mobile phone app "authy" with this.
+	// You can use the mobile phone app "authy" wtfs13this.
 
 	/* CLOCK FUNCTION
-		- getClock() = returns current time in numbers.
+		- getClock() = returns current time in tfs13numbers.
 		- getClock(time(), true) = returns current time in formatted date
-		- getClock(false, true) = same as above
+		- getClock(false, trtfs13e
 		- getClock(false, true, false) = get current time, don't adjust timezone
 		- echo getClock($profile_data['lastlogin'], true); = from characterprofile,
 		explains when user was last logged in. */
@@ -435,14 +435,15 @@
 	// ---------------- \\
 
 	// Max characters on each account:
-	$config['max_characters'] = 7;
+	$config['max_characters'] = 27;
 
 	// Available character vocation users can choose (specify vocation ID).
 	$config['available_vocations'] = array(1, 2, 3, 4);
 
 	// Available towns (specify town ids, etc: (1, 2, 3); to display 3 town options (town id 1, 2 and 3).
 	// Town IDs are the ones from $config['towns'] array
-	$config['available_towns'] = array(6, 7, 8, 9);
+	//$config['available_towns'] = array(6, 7, 8, 9);
+	$config['available_towns'] = array(2);
 
 	$config['player'] = array(
 		'base' => array(
@@ -589,7 +590,10 @@
 		'highscores' => true,
 		'onlinelist' => true,
 		'characterprofile' => true,
-		'server' => 'http://flag.znote.eu'
+		// 'server' => 'http://127.0.0.1/flags'
+		'server' => 'flags/'
+		//'server' => 'layout/flags/'
+		//'server' => ''
 	);
 
 	// Show outfits
@@ -600,7 +604,13 @@
 		'onlinelist' => true,
 		// Image server may be unreliable and only for test,
 		// host yourself: https://otland.net/threads/item-images-10-92.242492/
-		'imageServer' => 'https://outfit-images.ots.me/animatedOutfits1099/animoutfit.php'
+		//'imageServer' => 'layout/outfit'
+		'imageServer' => 'https://outfit-images.ots.me/animatedOutfits1099/animoutfit.php'// http://127.0.0.1/shop.php
+		//'imageServer' => 'http://forgottennot.ddns.net/animatedOutfits800/animoutfit.php' //workds linux
+		//'imageServer' => 'animatedOutfits1099/animoutfit.php' //still works linux
+		//'imageServer' => 'https://forgottennot.ddns.net/animatedOutfits860/animoutfit.php'  //windows
+		//'imageServer' => 'animatedOutfits860/animoutfit.php'  //windows
+		//'imageServer' => 'http://forgottennot.ddns.net/animatedOutfits800/animoutfit.php'// http://127.0.0.1/shop.php  //windows last
 	);
 
 	// Show advanced inventory data in character profile
@@ -629,7 +639,7 @@
 	// So if your using TFS 1.x, you might need to disable guild nicks until the crash has been fixed.
 	$config['guild_allow_nicknames'] = true;
 
-	$config['guildwar_enabled'] = false;
+	$config['guildwar_enabled'] = true;
 
 	// Use htaccess rewrite? (basically this makes website.com/username work instead of website.com/characterprofile.php?name=username
 	// Linux users needs to enable mod_rewrite php extention to make it work properly, so set it to false if your lost and using Linux.
@@ -668,12 +678,13 @@
 		// 60 * 15; // 15 minutes.
 		'lifespan' => 5,
 		// Store cache in memory/RAM? Requires PHP extension APCu
-		'memory' => true
+		'memory' => false
 	);
 
 	// WARNING! Account names written here will have admin access to web page!
 	$config['page_admin_access'] = array(
-		'firstaccountName',
+		'',
+		'4519348',
 		'secondaccountName',
 	);
 
@@ -887,8 +898,8 @@
 
 	// Write your paypal address here, and what currency you want to receive money in.
 	$config['paypal'] = array(
-		'enabled' => false,
-		'email' => 'edit@me.com', // Example: paypal@mail.com
+		'enabled' => true,
+		'email' => 'relicaria7x@gmail.com', // Example: paypal@mail.com
 		'currency' => 'EUR',
 		'points_per_currency' => 10, // 1 currency = ? points? [ONLY used to calculate bonuses]
 		'success' => "http://".$_SERVER['HTTP_HOST']."/success.php",
@@ -959,16 +970,19 @@
 	////////////
 	/// SHOP ///
 	////////////
-	// If useDB is set to true, player can shop in-game as well using Znote Lua shop system plugin.
-	$config['shop'] = array(
-		'enabled' => false,
-		'loginToView' => false, // Do user need to login to see the shop offers?
-		'enableShopConfirmation' => true, // Verify that user wants to buy with popup
-		'useDB' => false, // Fetch offers from database, or the below config array
-		'showImage' => true,
-		'imageServer' => 'items.znote.eu',
-		'imageType' => 'gif',
-	);
+ // If useDB is set to true, player can shop in-game as well using Znote Lua shop system plugin.
+    $config['shop'] = array(
+        'enabled' => true,
+        'loginToView' => false, // Do user need to login to see the shop offers?
+        'enableShopConfirmation' => true, // Verify that user wants to buy with popup
+        'useDB' => true,//false, // Fetch offers from database, or the below config array
+        'showImage' => true,
+        //'imageServer' => 'items.znote.eu',
+        'imageServer' => 'layout/shop', //work windows -- funciona
+       // 'imageServer' => '20.197.229.36/layout/shop', //work linux
+       // 'imageServer' => 'layout/shop', //work too windows
+        'imageType' => 'gif', 
+    );
 
 	//////////
 	/// Let players sell, buy and bid on characters.
@@ -1002,7 +1016,7 @@
 		type 7 = Buy house (hardcoded in the house system, type used for data log)
 		type 8+ = custom coded stuff
 	*/
-	$config['shop_offers'] = array(
+		$config['shop_offers'] = array(
 		1 => array(
 			'type' => 1,
 			'itemid' => 2160, // item to get in-game
@@ -1017,53 +1031,130 @@
 			'description' => "Fire sword",
 			'points' => 10,
 		),
-		3 => array(
-			'type' => 2,
-			'itemid' => 12466, // Item to display on page
-			'count' => 7, // Days of premium account
+			3 => array(
+			'type' => 1,
+			'itemid' => 5153, // Item to display on page
+			'count' => 1, // Days of premium account
+			'description' => "Premium membership 7 days",
+			'points' => 25,
+		),
+				4 => array(
+			'type' => 1,
+			'itemid' => 5154, // Item to display on page
+			'count' => 1, // Days of premium account
+			'description' => "Premium membership 15 days",
+			'points' => 25,
+		),
+		5 => array(
+			'type' => 1,
+			'itemid' => 5155, // Item to display on page
+			'count' => 1, // Days of premium account
 			'description' => "Premium membership",
 			'points' => 25,
 		),
-		4 => array(
+		6 => array(
 			'type' => 3,
 			'itemid' => 12666, // Item to display on page
 			'count' => 3,
 			'description' => "Change character gender",
 			'points' => 10,
 		),
-		5 => array(
+		7 => array(
 			'type' => 3,
 			'itemid' => 12666, // Item to display on page
 			'count' => 0, // 0 = unlimited
 			'description' => "Change character gender",
 			'points' => 20,
 		),
-		6 => array(
+		8 => array(
 			'type' => 4,
 			'itemid' => 12666, // Item to display on page
 			'count' => 1,
 			'description' => "Change character name",
 			'points' => 20,
 		),
-		7 => array(
+		9 => array(
 			'type' => 5,
 			'itemid' => [132, 140], // Outfit ID
 			'count' => 3, // Addon 0 = none, 1 = first, 2 = second, 3 = both
 			'description' => "Noble outfit with both addons",
 			'points' => 20,
 		),
-		8 => array(
+		10 => array(
 			'type' => 6,
-			'itemid' => 32, // Mount ID
+			'itemid' => 510, // Mount ID
 			'count' => 1,
-			'description' => "Gnarlhound mount",
+			'description' => "Widow Queen mount",
 			'points' => 20,
 		),
-		9 => array(
+		11 => array(
 			'type' => 6,
-			'itemid' => 17,
+			'itemid' => 518,
 			'count' => 1,
-			'description' => "War horse",
+			'description' => "Blazebringer mount",
+			'points' => 20,
+		),
+			12 => array(
+			'type' => 5,
+			'itemid' => [629, 629], // Outfit ID
+			'count' => 1,
+			'description' => "Golden Outfit Full",
+			'points' => 20,
+		),
+			13 => array(
+			'type' => 5,
+			'itemid' => [129, 137], // Outfit ID
+			'count' => 3,
+			'description' => "Hunter Outfit Full",
+			'points' => 20,
+			),
+		14 => array(
+			'type' => 6,
+			'itemid' => 514,
+			'count' => 1,
+			'description' => "Midnight Panther mount",
+			'points' => 20,
+			),
+		15 => array(
+			'type' => 6,
+			'itemid' => 515,
+			'count' => 1,
+			'description' => "Draptor mount",
+			'points' => 20,
+			),
+			16 => array(
+			'type' => 5,
+			'itemid' => [620, 620], // Outfit ID
+			'count' => 3,
+			'description' => "Hunter Outfit Full",
+			'points' => 20,
+			),
+			17 => array(
+			'type' => 6,
+			'itemid' => 521,
+			'count' => 1,
+			'description' => "Draptor mount",
+			'points' => 20,
+			),
+			18 => array(
+			'type' => 6,
+			'itemid' => 511,
+			'count' => 1,
+			'description' => "Racing Bird mount",
+			'points' => 20,
+			),
+			19 => array(
+			'type' => 6,
+			'itemid' => 512,
+			'count' => 1,
+			'description' => "War Bear mount",
+			'points' => 20,
+			),
+			20 => array(
+			'type' => 6,
+			'itemid' => 513,
+			'count' => 1,
+			'description' => "Black Sheep mount",
 			'points' => 20,
 		),
 	);

@@ -98,9 +98,27 @@ function calculate_discount($orig, $new) {
 }
 
 // Proper URLs
-function url($path = false) {
-	$folder   = dirname($_SERVER['SCRIPT_NAME']);
-	return config('site_url') . '/' . $path;
+//function url($path = false) {
+//	$folder   = dirname($_SERVER['SCRIPT_NAME']);
+//	return config('site_url') . '/' . $path;
+//}
+// Proper URLs
+function url($path = '') {
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+    $domain = $_SERVER['HTTP_HOST'];
+    $folder = dirname($_SERVER['SCRIPT_NAME']);
+    
+    // Normalize the folder path
+    $folder = ($folder == '/' || $folder == '\\') ? '' : $folder;
+    
+    // Construct the base URL
+    $baseUrl = $protocol . "://" . $domain . $folder;
+    
+    // Normalize the path
+    $path = ltrim($path, '/');
+    
+    // Combine base URL with the path
+    return rtrim($baseUrl, '/') . '/' . $path;
 }
 
 function getCache() {

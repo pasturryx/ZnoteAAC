@@ -20,7 +20,8 @@ $accQueriesData = array();
 
 session_start();
 ob_start();
-require_once 'config.php';
+//require_once 'config.php';
+require_once dirname(__DIR__) . '/config.php'; // Update
 $sessionPrefix = $config['session_prefix'];
 if ($config['paypal']['enabled'] || $config['use_captcha']) {
 	$curlcheck = extension_loaded('curl');
@@ -54,16 +55,16 @@ if (user_logged_in() === true) {
 	$session_user_id = getSession('user_id');
 	if ($config['ServerEngine'] !== 'OTHIRE') {
 		if ($config['ServerEngine'] == 'TFS_10') {
-			$hasPremDays = mysql_select_single("SHOW COLUMNS from `accounts` WHERE `Field` = 'premdays'");
+			$hasPremDays = mysql_select_single("SHOW COLUMNS from `accounts` WHERE `Field` = 'premium_ends_at'");
 			if ($hasPremDays === false) {
 				$tfs_10_hasPremDays = false;
 				$user_data = user_data($session_user_id, 'id', 'name', 'password', 'email', 'premium_ends_at');
-				$user_data['premdays'] = ($user_data['premium_ends_at'] - time() > 0) ? floor(($user_data['premium_ends_at'] - time()) / 86400) : 0;
+				$user_data['premium_ends_at'] = ($user_data['premium_ends_at'] - time() > 0) ? floor(($user_data['premium_ends_at'] - time()) / 86400) : 0;
 			} else {
-				$user_data = user_data($session_user_id, 'id', 'name', 'password', 'email', 'premdays');
+				$user_data = user_data($session_user_id, 'id', 'name', 'password', 'email', 'premium_ends_at');
 			}
 		} else {
-			$user_data = user_data($session_user_id, 'id', 'name', 'password', 'email', 'premdays');
+			$user_data = user_data($session_user_id, 'id', 'name', 'password', 'email', 'premium_ends_at');
 		}
 	} else
 		$user_data = user_data($session_user_id, 'id', 'password', 'email', 'premend');
@@ -150,7 +151,8 @@ $filename = explode('/', $_SERVER['SCRIPT_NAME']);
 $filename = $filename[count($filename) - 1];
 $page_filename = str_replace('.php', '', $filename);
 if ($config['allowSubPages']) {
-	require_once 'layout/sub.php';
+	//require_once 'layout/sub.php';
+	require_once __DIR__ . '/../layout/sub.php';
 	if (isset($subpages) && !empty($subpages)) {
 		foreach ($subpages as $page) {
 			if ($page['override'] && $page['file'] === $filename) {

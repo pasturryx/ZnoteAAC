@@ -1,0 +1,21 @@
+p{
+  
+   
+  }
+  .post{
+    font-family: lato;
+    position: relative;
+    border: 2px solid #46421f6b;
+    width: 27cm;
+    height: 100%;
+    margin: 0 auto;
+    top: 14px;
+    border-radius: 9px;
+    position: relative;
+    border-color: #595959;
+    background-color: #292929;
+    padding: 27px;
+    width: 927px;
+    word-break: break-word;
+    font-size: 20px;
+  }

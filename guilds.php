@@ -1,4 +1,5 @@
 <?php require_once 'engine/init.php';
+
 if ($config['require_login']['guilds']) protect_page();
 $isOtx = ($config['CustomVersion'] == 'OTX') ? true : false;
 
@@ -68,6 +69,7 @@ if (isset($guilds) && !empty($guilds) && $guilds !== false) {
 		foreach ($guilds as $guild) {
 			if ($guild['total'] >= 1) {
 				$url = url("guilds.php?name=". $guild['name']);
+				//$url = url("guild/". urlencode($guild['name']));
 				?>
 				<tr class="special" onclick="javascript:window.location.href='<?php echo $url; ?>'">
 					<td style="width: 100px;">
@@ -88,6 +90,7 @@ if (isset($guilds) && !empty($guilds) && $guilds !== false) {
 			}
 		}
 		?>
+		<link rel="stylesheet" href="<?php echo htmlspecialchars('path/to/tibia.css'); ?>">
 </table>
 <?php } else echo '<p>Guild list is empty.</p>';?>
 <!-- user stuff -->
@@ -113,7 +116,7 @@ if (user_logged_in() === true) {
 				if ($char_data['online'] == 0) {
 
 					// If character is premium
-					if ($config['guild_require_premium'] == false || $user_data['premdays'] > 0) {
+					if ($config['guild_require_premium'] == false || $user_data['premium_ends_at'] > 0) {
 
 						if (get_character_guild_rank($user_id) < 1) {
 
@@ -157,7 +160,8 @@ if (user_logged_in() === true) {
 				</select>
 				<input type="text" name="guild_name">
 
-				<input type="submit" value="Create Guild">
+				<!-- <input type="submit" value="Create Guild"> -->
+				<input type="submit" value="Create Guild" div class="BigButton btn" style="margin: 0 5px;display: inline-block;background-image:url(layout/tibia_img/sbutton.gif)">
 			</li>
 		</ul>
 	</form>
@@ -215,61 +219,100 @@ if (user_logged_in() === true) {
 	// Display the specific guild page
 ?>
 
-<div id="guildTitleDiv">
-	<?php echo (isset($_GET['error'])) ? "<font size='5' color='red'>".sanitize($_GET['error'])."</font><br><br>" : ""; ?>
-	<?php if ($config['use_guild_logos']): ?>
-	<div id="guildImageDiv" style="float: left; margin-right: 10px;">
-		<img style="max-width: 100px; max-height: 100px;" src="<?php logo_exists(sanitize($_GET['name'])); ?>">
-	</div>
-	<?php endif; ?>
-	<div id="guildDescription">
-		<h1>Guild: <?php echo sanitize($_GET['name']); ?></h1>
-		<p><?php echo $guild['motd']; ?></p>
-	</div>
+<div id="guildTitleDiv" style="text-align: center;">
+    <?php echo (isset($_GET['error'])) ? "<font size='5' color='red'>" . sanitize($_GET['error']) . "</font><br><br>" : ""; ?>
+    <?php if ($config['use_guild_logos']): ?>
+        <!-- <div id="guildImageDiv" style="display: inline-block; margin-right: 10px; margin-top: 10px"> -->
+        	<div id="guildImageDiv" style="display: inline-block; margin-right: 10px; margin-top: 10px;">
+    <img style="max-width: 120px !important; max-height: 100px !important;" src="<?php echo htmlspecialchars(logo_exists(sanitize($_GET['name']))); ?>">
+
+            <!-- <img style="max-width: 180px; max-height: 180px;" src="<php echo logo_exists(sanitize($_GET['name'])); >"> -->
+            	<!-- <img style="max-width: 180px !important; max-height: 180px !important;" src="<php echo logo_exists(sanitize($_GET['name'])); >"> -->
+
+        </div>
+    <?php endif; ?>
 </div>
-<table id="guildViewTable" class="table table-striped">
-	<tr class="yellow">
-		<th>Rank:</th>
-		<th>Name:</th>
-		<th>Level:</th>
-		<th>Vocation:</th>
-		<th>Status:</th>
-	</tr>
-		<?php
-		if ($config['ServerEngine'] == 'TFS_10') {
-			$onlinelist = array();
-			$gplayers = array();
-			foreach ($players as $player) {
-				$gplayers[] = $player['id'];
-			}
-			$gplayers = join(',',$gplayers);
-			$onlinequery = mysql_select_multi("SELECT `player_id` FROM `players_online` WHERE `player_id` IN ($gplayers);");
-			if ($onlinequery !== false) foreach ($onlinequery as $online) {
-				$onlinelist[] = $online['player_id'];
-			}
-		}
-		//data_dump($players, false, "Data");
-		$rankName = '';
-		foreach ($players as $player) {
-			if ($config['ServerEngine'] !== 'TFS_10') {
-				$chardata['online'] = $player['online'];
-			} else $chardata['online'] = (in_array($player['id'], $onlinelist)) ? 1 : 0;
-			echo '<tr>';
-			echo '<td>' . ($rankName !== $player['rank_name'] ? $player['rank_name'] : '') . '</td>';
-			$rankName = $player['rank_name'];
-			echo '<td><a href="characterprofile.php?name='. $player['name'] .'">'. $player['name'] .'</a>';
-			if (!empty($player['guildnick'])) {
-				echo ' ('. $player['guildnick'] .')';
-			}
-			echo '</td>';
-			echo '<td>'. $player['level'] .'</td>';
-			echo '<td>'. $config['vocations'][$player['vocation']]['name'] .'</td>';
-			if ($chardata['online'] == 1) echo '<td> <b><font color="green"> Online </font></b></td>';
-			else echo '<td> Offline </td>';
-			echo '</tr>';
-		}
-		?>
-</table>
+<div class="TableContainer highlight" style="margin-top: 1cm; margin-bottom: 1cm;">
+    <div class="CaptionContainer">
+        <div class="CaptionInnerContainer">
+            <span class="CaptionEdgeLeftTop" style="background-image: url(layout/tibia_img/box-frame-edge.gif);"></span>
+            <span class="CaptionEdgeRightTop" style="background-image: url(layout/tibia_img/box-frame-edge.gif);"></span>
+            <span class="CaptionBorderTop" style="background-image: url(layout/tibia_img/table-headline-border.gif);"></span>
+            <span class="CaptionVerticalLeft" style="background-image: url(layout/tibia_img/box-frame-vertical.gif);"></span>
+             <div class="Text">Guild: <?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : 'Guild Name'; ?></div>
+            <span class="CaptionVerticalRight" style="background-image: url(layout/tibia_img/box-frame-vertical.gif);"></span>
+            <span class="CaptionBorderBottom" style="background-image: url(layout/tibia_img/table-headline-border.gif);"></span>
+            <span class="CaptionEdgeLeftBottom" style="background-image: url(layout/tibia_img/box-frame-edge.gif);"></span>
+            <span class="CaptionEdgeRightBottom" style="background-image: url(layout/tibia_img/box-frame-edge.gif);"></span>
+        </div>
+    </div>
+    <div class="TableContentAndRightShadow" style="background-image: url(layout/tibia_img/table-shadow-rm.gif);">
+        <div class="TableContentContainer">
+            <table class="TableContent" width="100%" style="border: 1px solid #faf0d7;">
+                <tr>
+                    <td>
+                        <div class="TableShadowContainerRightTop">
+                            <div class="TableShadowRightTop" style="background-image: url(layout/tibia_img/table-shadow-rt.gif);"></div>
+                        </div>
+                        <div class="TableContentAndRightShadow" style="background-image: url(layout/tibia_img/table-shadow-rm.gif);">
+                            <div class="TableContentContainer">
+                                <table id="guildViewTable" class="table table-striped">
+                                    <tr class="yellow">
+                                        <th>Rank:</th>
+                                        <th>Name:</th>
+                                        <th>Level:</th>
+                                        <th>Vocation:</th>
+                                        <th>Status:</th>
+                                    </tr>
+                                    <?php
+                                    if ($config['ServerEngine'] == 'TFS_10') {
+                                        $onlinelist = array();
+                                        $gplayers = array();
+                                        foreach ($players as $player) {
+                                            $gplayers[] = $player['id'];
+                                        }
+                                        $gplayers = join(',', $gplayers);
+                                        $onlinequery = mysql_select_multi("SELECT `player_id` FROM `players_online` WHERE `player_id` IN ($gplayers);");
+                                        if ($onlinequery !== false) foreach ($onlinequery as $online) {
+                                            $onlinelist[] = $online['player_id'];
+                                        }
+                                    }
+                                    //data_dump($players, false, "Data");
+                                    $rankName = '';
+                                    foreach ($players as $player) {
+                                        if ($config['ServerEngine'] !== 'TFS_10') {
+                                            $chardata['online'] = $player['online'];
+                                        } else $chardata['online'] = (in_array($player['id'], $onlinelist)) ? 1 : 0;
+                                        echo '<tr>';
+                                        echo '<td>' . ($rankName !== $player['rank_name'] ? $player['rank_name'] : '') . '</td>';
+                                        $rankName = $player['rank_name'];
+                                        echo '<td><a href="characterprofile.php?name=' . $player['name'] . '">' . $player['name'] . '</a>';
+                                        if (!empty($player['guildnick'])) {
+                                            echo ' (' . $player['guildnick'] . ')';
+                                        }
+                                        echo '</td>';
+                                        echo '<td>' . $player['level'] . '</td>';
+                                        echo '<td>' . $config['vocations'][$player['vocation']]['name'] . '</td>';
+                                        if ($chardata['online'] == 1) echo '<td> <b><font color="green"> Online </font></b></td>';
+                                        else echo '<td> Offline </td>';
+                                        echo '</tr>';
+                                    }
+                                    ?>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="TableShadowContainer">
+                            <div class="TableBottomShadow" style="background-image: url(layout/tibia_img/table-shadow-bm.gif);">
+                                <div class="TableBottomLeftShadow" style="background-image: url(layout/tibia_img/table-shadow-bl.gif);"></div>
+                                <div class="TableBottomRightShadow" style="background-image: url(layout/tibia_img/table-shadow-br.gif);"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
 
 <?php if ($inv_count > 0) { ?>
 <h3>Invited characters</h3>
@@ -671,6 +714,7 @@ if ($highest_access >= 2) {
 							<li>Create forum guild board:<br>
 							<input type="hidden" name="forumGuildId" value="<?php echo $gid; ?>">
 							<input type="submit" value="Create Guild Board">
+							<input type="submit" value="Create Guild Board" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/sbutton.gif);">
 						</ul>
 					</form>
 					<?php
@@ -686,7 +730,8 @@ if ($highest_access >= 2) {
 				<ul>
 					<li>Upload guild logo [.gif images only, 100x100px size]:<br>
 						<input type="file" name="file" id="file" accept="image/gif">
-						<input type="submit" name="submit" value="Upload guild logo">
+						<!-- <input type="submit" name="submit" value="Upload guild logo"> -->
+						<input type="submit" value="Upload guild logo" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/sbutton.gif);">
 					</li>
 				</ul>
 			</form>
@@ -706,7 +751,9 @@ if ($highest_access >= 2) {
 			<ul>
 				<li>Invite Character to guild:<br>
 					<input type="text" name="invite" placeholder="Character name">
-					<input type="submit" value="Invite Character">
+					<!-- <input type="submit" value="Invite Character"> -->
+					<input type="submit" value="Invite Character" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/button_green.gif);">
+
 				</li>
 			</ul>
 		</form>
@@ -716,7 +763,8 @@ if ($highest_access >= 2) {
 				<li>Change guild message:</li>
 				<li>
 					<textarea name="motd" placeholder="Guild Message" cols="50" rows="3"><?php echo $guild['motd']; ?></textarea><br>
-					<input type="submit" value="Update guild message">
+					<!-- <input type="submit" value="Update guild message"> -->
+					<input type="submit" value="Update guild messager" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/sbutton.gif);">
 				</li>
 			</ul>
 		</form>
@@ -743,7 +791,8 @@ if ($highest_access >= 2) {
 						?>
 						</select>
 						<input type="text" name="guildnick" maxlength="15" placeholder="leave blank to erase">
-						<input type="submit" value="Change Nick">
+						<!-- <input type="submit" value="Change Nick"> -->
+						<input type="submit" value="Change Nick" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/sbutton.gif);">
 					</li>
 				</ul>
 			</form>
@@ -781,7 +830,8 @@ if ($highest_access >= 2) {
 						}
 						?>
 					</select>
-					<input type="submit" value="Promote Member">
+					<!-- <input type="submit" value="Promote Member"> -->
+					<input type="submit" value="Promote Member" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/sbutton.gif);">
 				</li>
 			</ul>
 		</form>
@@ -803,7 +853,8 @@ if ($highest_access >= 2) {
 					}
 					?>
 					</select>
-					<input type="submit" value="Remove member">
+					<!-- <input type="submit" value="Remove member"> -->
+					<input type="submit" value="Remove Member" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/sbutton.gif);">
 				</li>
 			</ul>
 		</form>
@@ -821,7 +872,8 @@ if ($highest_access >= 2) {
 						}
 						echo '<input type="hidden" name="change_ranks" value="' . $gid . '" />';
 					?>
-					<input type="submit" value="Update Ranks">
+					<!-- <input type="submit" value="Update Ranks"> -->
+					<input type="submit" value="Update Ranks" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/button_green.gif);">
 				</li>
 			</ul>
 		</form>
@@ -830,7 +882,12 @@ if ($highest_access >= 2) {
 			<ul>
 				<li><b>DELETE GUILD (All members must be offline):</b><br>
 					<?php echo '<input type="hidden" name="disband" value="' . $gid . '" />'; ?>
-					<input type="submit" value="Disband Guild">
+					<!-- <input type="submit" value="Disband Guild"> -->
+					<input type="submit" value="Disband Guild" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/button_red.gif);">
+					<!-- <input type="submit" value="Disband Guild" class="BigButton btn" style="margin: 0 5px; display: inline-block;"> -->
+					<!-- <input type="submit" value="Disband Guild" class="BigButton btn" style="margin: 0 5px; display: inline-block;"> -->
+
+
 				</li>
 			</ul>
 		</form>
@@ -850,7 +907,8 @@ if ($highest_access >= 2) {
 					}
 					?>
 					</select>
-					<input type="submit" value="Change Leadership">
+					<!-- <input type="submit" value="Change Leadership"> -->
+					<input type="submit" value="Change Leadership" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/sbutton.gif);">
 				</li>
 			</ul>
 		</form>
@@ -862,7 +920,8 @@ if ($highest_access >= 2) {
 				<li>Invite guild to war:<br>
 					<input type="text" name="warinvite" placeholder="Guild name">
 					<input type="number" min="10" max="999" name="limit">
-					<input type="submit" value="Invite Guild">
+					<!-- <input type="submit" value="Invite Guild"> -->
+					<input type="submit" value="Invite Guild" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/button_green.gif);">
 				</li>
 			</ul>
 		</form>
@@ -971,7 +1030,10 @@ if ($forumExist !== false) {
 			}
 			?>
 			</select>
-			<input type="submit" value="Leave Guild">
+			<!-- <input type="submit" value="Leave Guild"> -->
+			<input type="submit" value="Leave Guild" class="BigButton btn" style="margin: 0 5px; display: inline-block; background-image: url(layout/tibia_img/button_red.gif);">
+
+
 		</li>
 	</ul>
 </form>
