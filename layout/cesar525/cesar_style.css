@@ -1,0 +1,196 @@
+.cesar-forum-background-table{
+    background-color: black;
+    background-color: #0d0d0d;
+    border: solid 1px #4b4b4b;
+    border-radius: 10px;
+    width: 100%;
+    padding: 11px;
+  }
+  .cesar-data-forum-table{
+    background-color: #000;
+    color: white;
+    border: solid 1px #80808047;
+    padding: 2px 0px 17px 9px;
+    font-size: 21px;
+}
+.cesar-data-forum-table-select{
+    background-color: #000;
+    color: white;
+    border: solid 1px #80808047;
+    padding: 2px 0px 17px 9px;
+    cursor:pointer;
+    font-family: 'Merriweather', serif;
+    font-size: 23px;
+}
+.cesar-data-forum-table-select:hover{
+    background-color: rgb(15, 15, 15);
+    color:rgb(255, 255, 255);
+}
+.cesar-button{
+    background-color: #f000;
+    border: solid 1px white;
+    border-radius: 9px;    
+    color: white;
+    padding: 5px;
+    width: 63%;
+    transition:background-color ease 0.3s;
+}
+.cesar-button:hover{
+    background-color: #4b7f00;
+
+}
+
+.cesar-button-delete{
+    background-color: #f000;
+    border: solid 1px white;
+    border-radius: 9px;
+    color: white;
+    padding: 5px;
+    width: 63%;
+    transition:background-color ease 0.3s;
+}
+.cesar-button-delete:hover{
+    background-color: #7f0600;
+
+}
+.cesar-table-headers{
+    background-color: #282828;
+    color: white;
+    border-radius: 11px;
+
+}
+.imgs{
+    width: 31px;
+    padding: 11px;
+    margin-bottom: -17px;
+}
+.cesar-category-hint{
+    font-size: 13px;
+    word-break: break-word;
+    color: #aeadad;
+    width: 85%;
+}
+.cesar-create-board{
+    background-color: black;
+    width: 100%;
+    border-radius: 21px;
+    margin-top: 11px;
+    padding-bottom: 11px;
+    border: solid 1px #8080808c;
+}
+
+color: #d8d8d8;
+style="margin-left: 11px;padding:5px;width: 500px;font-size: 18px;background-color: #0d0d0d;border: solid 1px gray;border-radius: 8px;color: white;"
+style="margin-left: 11px;padding:5px;width: 500px;font-size: 18px;background-color: #0d0d0d;border: solid 1px gray;border-radius: 8px;color: white;"
+.cesar-forms{
+    padding-left: 21px;
+ padding-top:21px;
+ color: #ddd8d8;
+}
+
+.forum-fullbackground{
+    padding: 10px;
+background-color: blue;
+width: 69%;
+border-radius: 11px;
+}
+
+.cesar-submit-button{
+    background-color: #1e1a1a;
+    color: white;
+    padding: 11px;
+    border: solid 1px gray;
+    border-radius: 15px;
+  transition:background-color ease 0.3s;
+}
+.cesar-submit-button:hover{
+    background-color:rgb(3, 103, 3);
+}
+
+.cesar-selecting{
+    border-radius: 21px;
+padding: 11px;
+background-color: #2f0505;
+color: #d5d0d0;
+cursor:pointer;
+}
+.cesar-textarea{
+    width: 329px;
+height: 73px;
+resize: none;
+background-color: #353434;
+border: solid 1px #790505;
+color: white;
+font-family: arial;
+border-radius: 11px;
+padding: 7px;
+}
+
+.cesar-text{
+background-color: #353434;
+border: solid 1px #790505;
+color: white;
+font-family: arial;
+border-radius: 11px;
+padding: 7px;
+}
+
+.cesar-edit-board{
+    background-color:black;
+}
+
+.map-bar{
+    background-color: black;
+padding: 3px;
+border: solid 1px #4a4949;
+border-radius: 9px;
+}
+
+.cesar-avatar{
+    width: 121px;
+    background-color: black;
+
+}
+
+.cesar-posted-text{  
+    word-break: break-word;
+    padding: 9px;
+  }
+
+.slide-click{
+    color:white;
+    cursor:pointer;
+    position: relative;
+    left: 0px;
+    transition: left ease 0.3s;
+    font-family: Gideon;
+    font-size: 25px;
+}
+
+.slide-click:hover {
+    color:orange;
+    transition: left ease 0.3s;
+    position: relative;
+    left: +20px;
+}
+
+.post-player-name{
+    text-decoration: none;
+    font-family: 'Martel', serif;
+    color: orange;
+    cursor: pointer;
+}
+.post-player-name:hover{
+    color: rgb(255, 201, 100);
+}
+
+.link-map{
+    text-decoration: none;
+    font-family: 'Martel', serif;
+    color: rgb(255, 78, 8);
+    cursor: pointer;
+}
+.link-map:hover{
+    color: rgb(255, 209, 4);
+   rgb(170, 0, 255)rgb(219, 164, 246)
+}

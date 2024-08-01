@@ -1,0 +1,17 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /characterprofile.php?name=$1
+
+# Handle guild pages
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^guild/(.*)$ /guilds.php?name=$1 [L,QSA]
+RewriteRule ^(.*)$ /guilds.php?name=$1
+
+# Force HTTPS for the domain forgottenot.online
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP_HOST} ^(www\.)?forgottenot\.online$ [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+

@@ -1,0 +1,11 @@
+Module
+  name: game_guildTitle
+  description: Guild Titles for Players
+  author: Klank
+  website: none
+  sandboxed: true
+  autoload: true
+  autoload-priority: 1000
+  scripts: [ guildTitle.lua ]
+  @onLoad: init()
+  @onUnload: terminate()

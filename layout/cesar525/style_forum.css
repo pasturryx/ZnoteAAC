@@ -1,0 +1,25 @@
+body{
+    background-image: url("img/bg.jpg");
+    background-repeat: no-repeat;
+    background-color:rgb(0, 0, 0);
+    background-position: center;
+    background-position: top;
+    height:100%;
+    width:100%;
+    background-attachment: fixed;
+}
+.body_header{
+    background-color:rgba(250, 4, 4, 0);
+    margin: 0 auto;
+    width: 1220px;
+}
+.body_chest{
+    background-color:rgba(0, 0, 0, 0);
+    margin: 0 auto;
+    width: 1220px;
+}
+.body_footer{
+    background-color:rgba(0, 0, 255, 0);
+    margin: 0 auto;
+    width: 1220px;
+}
